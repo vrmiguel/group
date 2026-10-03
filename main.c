@@ -121,13 +121,14 @@ static int by_footprint_desc(const void *a, const void *b) {
 }
 
 static int snapshot(pid_t **out) {
-    int cap = 4096, bytes, count;
+    int cap = 4096, count;
     pid_t *pids;
     for (;;) {
         pids = malloc((size_t)cap * sizeof(pid_t));
-        bytes = proc_listallpids(pids, cap * (int)sizeof(pid_t));
-        if (bytes <= 0) { free(pids); return -1; }
-        count = bytes / (int)sizeof(pid_t);
+        // unlike proc_listpids, proc_listallpids returns the number of pids
+        // written, not a byte count
+        count = proc_listallpids(pids, cap * (int)sizeof(pid_t));
+        if (count <= 0) { free(pids); return -1; }
         if (count < cap) {
             // non-full buffer is the only way to be sure proc_listallpids returned
             // all matching pids
@@ -139,12 +140,26 @@ static int snapshot(pid_t **out) {
     return count;
 }
 
-static unsigned long long footprint_of(pid_t p) {
+// returns 0 if the footprint could not be read (e.g. we dont own this
+// process, or it exited after the snapshot)
+static int footprint_of(pid_t p, unsigned long long *out) {
     struct rusage_info_v2 ri;
-    if (proc_pid_rusage(p, RUSAGE_INFO_V2, (rusage_info_t *)&ri) == 0)
-        return ri.ri_phys_footprint;
-    // 0 if we dont own this process
+    if (proc_pid_rusage(p, RUSAGE_INFO_V2, (rusage_info_t *)&ri) == 0) {
+        *out = ri.ri_phys_footprint;
+        return 1;
+    }
+    *out = 0;
     return 0;
+}
+
+// quotes a CSV field, doubling any embedded quotes
+static void print_csv_field(const char *s) {
+    putchar('"');
+    for (; *s; s++) {
+        if (*s == '"') putchar('"');
+        putchar(*s);
+    }
+    putchar('"');
 }
 
 static void usage(const char *argv0) {
@@ -155,7 +170,11 @@ static void usage(const char *argv0) {
         "  %s --pid <pid>\n"
         "  %s --app </path/to/App.app>\n"
         "  %s --bundle <App.app|App>\n"
-        "  %s --name <process-name>\n",
+        "  %s --name <process-name>\n"
+        "\n"
+        "options (may appear anywhere):\n"
+        "  --csv   print one CSV row per process (pid,name,footprint_bytes)\n"
+        "          instead of the human-readable table\n",
         argv0, argv0, argv0, argv0, argv0, argv0);
 }
 
@@ -229,15 +248,36 @@ static int pid_matches_target(pid_t p, const Target *target, int pass) {
 }
 
 int main(int argc, char **argv) {
+    // pull out option flags so parse_target only sees the target arguments
+    int csv = 0;
+    int targc = 0;
+    char **targv = malloc((size_t)argc * sizeof(char *));
+    for (int i = 0; i < argc; i++) {
+        if (i > 0 && strcmp(argv[i], "--csv") == 0) { csv = 1; continue; }
+        targv[targc++] = argv[i];
+    }
+
     Target target;
-    if (!parse_target(argc, argv, &target)) {
+    if (!parse_target(targc, targv, &target)) {
+        int help = targc == 2 &&
+            (strcmp(targv[1], "-h") == 0 || strcmp(targv[1], "--help") == 0);
         usage(argv[0]);
-        return (argc == 2 &&
-            (strcmp(argv[1], "-h") == 0 || strcmp(argv[1], "--help") == 0)) ? 0 : 2;
+        free(targv);
+        return help ? 0 : 2;
     }
 
     resp_fn responsible = (resp_fn)dlsym(
         RTLD_DEFAULT, "responsibility_get_pid_responsible_for_pid");
+    if (!responsible) {
+        // without it, helper processes (WebKit, Electron, etc.) cannot be
+        // attributed to the app and the total would silently cover only the
+        // main process
+        fprintf(stderr,
+            "error: responsibility_get_pid_responsible_for_pid not available; "
+            "cannot group helper processes\n");
+        free(targv);
+        return 1;
+    }
 
     pid_t *pids;
     int n = snapshot(&pids);
@@ -254,8 +294,12 @@ int main(int argc, char **argv) {
         }
     }
     if (app_pid == 0) {
-        fprintf(stderr, "%s not running\n", target.value ? target.value : "target");
+        if (target.mode == TARGET_PID)
+            fprintf(stderr, "pid %d not running\n", target.pid);
+        else
+            fprintf(stderr, "%s not running\n", target.value);
         free(pids);
+        free(targv);
         return 1;
     }
 
@@ -265,27 +309,41 @@ int main(int argc, char **argv) {
     for (int i = 0; i < n; i++) {
         pid_t p = pids[i];
         if (p <= 0) continue;
-        int rpid = responsible ? responsible(p) : p;
+        int rpid = responsible(p);
         if (rpid < 0) rpid = p;
         if (p != app_pid && rpid != app_pid) continue;
         group[g].pid = p;
-        group[g].footprint = footprint_of(p);
         group[g].name[0] = 0;
         proc_name(p, group[g].name, sizeof(group[g].name));
+        if (!footprint_of(p, &group[g].footprint)) {
+            fprintf(stderr,
+                "warning: could not read footprint of pid %d (%s); counted as 0\n",
+                p, group[g].name[0] ? group[g].name : "?");
+        }
         g++;
     }
     free(pids);
 
     qsort(group, (size_t)g, sizeof(Proc), by_footprint_desc);
 
-    unsigned long long total = 0;
-    for (int i = 0; i < g; i++) {
-        printf("%7d  %8.1f MB  %s\n",
-               group[i].pid, group[i].footprint / 1e6, group[i].name);
-        total += group[i].footprint;
+    if (csv) {
+        printf("pid,name,footprint_bytes\n");
+        for (int i = 0; i < g; i++) {
+            printf("%d,", group[i].pid);
+            print_csv_field(group[i].name);
+            printf(",%llu\n", group[i].footprint);
+        }
+    } else {
+        unsigned long long total = 0;
+        for (int i = 0; i < g; i++) {
+            printf("%7d  %8.1f MB  %s\n",
+                   group[i].pid, group[i].footprint / 1e6, group[i].name);
+            total += group[i].footprint;
+        }
+        printf("%7s  %8.1f MB  (total, %d processes)\n", "", total / 1e6, g);
     }
-    printf("%7s  %8.1f MB  (total, %d processes)\n", "", total / 1e6, g);
 
     free(group);
+    free(targv);
     return 0;
 }
