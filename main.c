@@ -5,6 +5,8 @@
 #include <dlfcn.h>
 #include <libproc.h>
 #include <sys/resource.h>
+#include <inttypes.h>
+#include <mach/mach_time.h>
 
 typedef int (*resp_fn)(int);
 
@@ -12,6 +14,13 @@ typedef struct {
     pid_t pid;
     // in bytes, should match Activity Monitor's Memory column
     unsigned long long footprint;
+    uint64_t sample_ticks;
+    uint64_t start_ticks;
+    // how many CPU seconds were used by this group since it started
+    double cpu_seconds;
+    // how many seconds since this group started
+    double age_seconds;
+    int usage_available;
     char name[256];
 } Proc;
 
@@ -140,16 +149,30 @@ static int snapshot(pid_t **out) {
     return count;
 }
 
-// returns 0 if the footprint could not be read (e.g. we dont own this
-// process, or it exited after the snapshot)
-static int footprint_of(pid_t p, unsigned long long *out) {
+static double ticks_to_seconds(uint64_t ticks, mach_timebase_info_data_t timebase) {
+    return (double)ticks * timebase.numer / timebase.denom / 1e9;
+}
+
+static void read_usage(Proc *p, mach_timebase_info_data_t timebase) {
     struct rusage_info_v2 ri;
-    if (proc_pid_rusage(p, RUSAGE_INFO_V2, (rusage_info_t *)&ri) == 0) {
-        *out = ri.ri_phys_footprint;
-        return 1;
+    uint64_t before = mach_absolute_time();
+    int result = proc_pid_rusage(p->pid, RUSAGE_INFO_V2, (rusage_info_t *)&ri);
+    uint64_t after = mach_absolute_time();
+    p->sample_ticks = before + (after - before) / 2;
+    p->footprint = 0;
+    p->start_ticks = 0;
+    p->cpu_seconds = 0;
+    p->age_seconds = 0;
+    p->usage_available = result == 0;
+    if (p->usage_available) {
+        p->footprint = ri.ri_phys_footprint;
+        p->start_ticks = ri.ri_proc_start_abstime;
+        p->cpu_seconds = ticks_to_seconds(ri.ri_user_time, timebase)
+            + ticks_to_seconds(ri.ri_system_time, timebase);
+        // avoids underflow if a PID was reused during the read
+        if (p->start_ticks > p->sample_ticks) p->sample_ticks = after;
+        p->age_seconds = ticks_to_seconds(p->sample_ticks - p->start_ticks, timebase);
     }
-    *out = 0;
-    return 0;
 }
 
 // quotes a CSV field, doubling any embedded quotes
@@ -173,8 +196,12 @@ static void usage(const char *argv0) {
         "  %s --name <process-name>\n"
         "\n"
         "options (may appear anywhere):\n"
-        "  --csv   print one CSV row per process (pid,name,footprint_bytes)\n"
-        "          instead of the human-readable table\n",
+        "  --csv   print one CSV row per process, including memory, cumulative\n"
+        "          CPU seconds, age, sample/start Mach ticks and timebase ratio\n"
+        "\n"
+        "CPU SEC is cumulative user + system CPU time, not a percentage.\n"
+        "AGE SEC and Mach sample timestamps exclude system sleep.\n"
+        "CSV times unavailable after a failed read are empty.\n",
         argv0, argv0, argv0, argv0, argv0, argv0);
 }
 
@@ -266,6 +293,14 @@ int main(int argc, char **argv) {
         return help ? 0 : 2;
     }
 
+    mach_timebase_info_data_t timebase;
+    if (mach_timebase_info(&timebase) != KERN_SUCCESS ||
+        timebase.numer == 0 || timebase.denom == 0) {
+        fprintf(stderr, "error: could not read Mach timebase\n");
+        free(targv);
+        return 1;
+    }
+
     resp_fn responsible = (resp_fn)dlsym(
         RTLD_DEFAULT, "responsibility_get_pid_responsible_for_pid");
     if (!responsible) {
@@ -315,9 +350,10 @@ int main(int argc, char **argv) {
         group[g].pid = p;
         group[g].name[0] = 0;
         proc_name(p, group[g].name, sizeof(group[g].name));
-        if (!footprint_of(p, &group[g].footprint)) {
+        read_usage(&group[g], timebase);
+        if (!group[g].usage_available) {
             fprintf(stderr,
-                "warning: could not read footprint of pid %d (%s); counted as 0\n",
+                "warning: could not read usage of pid %d (%s); memory counted as 0, CPU/start time unavailable\n",
                 p, group[g].name[0] ? group[g].name : "?");
         }
         g++;
@@ -327,20 +363,44 @@ int main(int argc, char **argv) {
     qsort(group, (size_t)g, sizeof(Proc), by_footprint_desc);
 
     if (csv) {
-        printf("pid,name,footprint_bytes\n");
+        printf("pid,name,footprint_bytes,cpu_seconds,age_seconds,sample_mach_ticks,"
+               "start_mach_ticks,timebase_numer,timebase_denom\n");
         for (int i = 0; i < g; i++) {
             printf("%d,", group[i].pid);
             print_csv_field(group[i].name);
-            printf(",%llu\n", group[i].footprint);
+            printf(",%llu,", group[i].footprint);
+            if (group[i].usage_available) {
+                printf("%.9f,%.9f,%" PRIu64 ",%" PRIu64,
+                       group[i].cpu_seconds, group[i].age_seconds,
+                       group[i].sample_ticks, group[i].start_ticks);
+            } else {
+                printf(",,%" PRIu64 ",", group[i].sample_ticks);
+            }
+            printf(",%u,%u\n", timebase.numer, timebase.denom);
         }
     } else {
         unsigned long long total = 0;
+        double total_cpu = 0;
+        int complete = 1;
+        printf("%7s  %11s  %12s  %12s  %s\n",
+               "PID", "MEMORY MB", "CPU SEC", "AGE SEC", "NAME");
         for (int i = 0; i < g; i++) {
-            printf("%7d  %8.1f MB  %s\n",
-                   group[i].pid, group[i].footprint / 1e6, group[i].name);
+            printf("%7d  %8.1f MB  ", group[i].pid, group[i].footprint / 1e6);
+            if (group[i].usage_available) {
+                printf("%12.3f  %12.3f  %s\n",
+                       group[i].cpu_seconds, group[i].age_seconds, group[i].name);
+                total_cpu += group[i].cpu_seconds;
+            } else {
+                printf("%12s  %12s  %s\n", "N/A", "N/A", group[i].name);
+                complete = 0;
+            }
             total += group[i].footprint;
         }
-        printf("%7s  %8.1f MB  (total, %d processes)\n", "", total / 1e6, g);
+        printf("%7s  %8.1f MB  ", "", total / 1e6);
+        if (complete) printf("%12.3f", total_cpu);
+        else printf("%12s", "N/A");
+        printf("  %12s  (total, %d processes%s)\n", "", g,
+               complete ? "" : "; incomplete usage");
     }
 
     free(group);
