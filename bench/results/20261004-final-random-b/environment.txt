@@ -1,0 +1,21 @@
+date: 2026-10-04T05:29:05
+command: bench/bench.py --runs 47 --order random --cooldown 5 --settle 5 --task-window 18 --trace --scenario final --checkpoints query --macros bench/macros --query bench/query.sql --out bench/results/20261004-final-random-b
+macOS: 26.6.2 (25G83)
+model: Mac14,10
+cpu: Apple M2 Pro
+memory: 16 GiB
+power: Now drawing from 'AC Power'
+low power mode: False
+group/bench commit: 03dbbc1 (uncommitted changes)
+warm-up launches per app: 1, settle: 5.0 s, cooldown: 5.0 s, main window threshold: 800x500, checkpoint settle: 0 s, task window: 18.0 s, trace: every 0.25 s
+app pgpad: /Applications/pgpad.app version 0.0.1
+app dbeaver: /Applications/DBeaver.app version 26.2.1
+app pgadmin: /Applications/pgAdmin 4.app version 9.18
+app dbgate: /Applications/DbGate.app version 7.3.1
+ghosthand: ghosthand 0.1.0
+macro pgpad/query: bench/macros/pgpad-query.ghost sha256 f129a37c477be2ce
+macro dbeaver/query: bench/macros/dbeaver-query.ghost sha256 4e2f7682f067fbe0
+macro pgadmin/query: bench/macros/pgadmin-query.ghost sha256 ecaa1cee5283882a
+macro dbgate/query: bench/macros/dbgate-query.ghost sha256 bd64a5c2f1334e80
+query: bench/query.sql sha256 bfbd7e1c951d3caa
+order: random, seed 3221571622

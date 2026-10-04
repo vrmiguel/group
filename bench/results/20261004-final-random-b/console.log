@@ -1,0 +1,391 @@
+writing to bench/results/20261004-final-random-b
+  warm-up 1/1  pgpad    startup    577 ms (not recorded)
+  warm-up 1/1  dbeaver  startup   8027 ms (not recorded)
+  warm-up 1/1  pgadmin  startup   7911 ms (not recorded)
+  warm-up 1/1  dbgate   startup   2087 ms (not recorded)
+  run  1/47  pgadmin  startup   4147 ms  query memory   902.2 MB  (6 processes)
+           trace: 108 samples, peak 940.3 MB
+  run  1/47  dbgate   startup    958 ms  query memory   658.0 MB  (9 processes)
+           trace: 95 samples, peak 800.4 MB
+  run  1/47  pgpad    startup    322 ms  query memory   280.2 MB  (8 processes)
+           trace: 92 samples, peak 424.7 MB
+  run  1/47  dbeaver  startup   3590 ms  query memory   721.5 MB  (2 processes)
+           trace: 105 samples, peak 1070.0 MB
+  run  2/47  dbgate   startup    800 ms  query memory   651.7 MB  (9 processes)
+           trace: 94 samples, peak 815.7 MB
+  run  2/47  pgadmin  startup   4360 ms  query memory   910.1 MB  (6 processes)
+           trace: 108 samples, peak 941.0 MB
+  run  2/47  dbeaver  startup   3645 ms  query memory   727.2 MB  (2 processes)
+           trace: 106 samples, peak 1021.1 MB
+  run  2/47  pgpad    startup    346 ms  query memory   260.7 MB  (6 processes)
+           trace: 92 samples, peak 408.1 MB
+  run  3/47  dbgate   startup    884 ms  query memory   671.9 MB  (9 processes)
+           trace: 95 samples, peak 775.1 MB
+  run  3/47  pgpad    startup    334 ms  query memory   258.4 MB  (6 processes)
+           trace: 93 samples, peak 388.9 MB
+  run  3/47  pgadmin  startup   4340 ms  query memory   865.3 MB  (6 processes)
+           trace: 108 samples, peak 949.2 MB
+  run  3/47  dbeaver  startup   3589 ms  query memory   716.3 MB  (2 processes)
+           trace: 105 samples, peak 1055.4 MB
+  run  4/47  dbgate   startup    886 ms  query memory   686.9 MB  (9 processes)
+           trace: 94 samples, peak 816.5 MB
+  run  4/47  pgpad    startup    346 ms  query memory   260.4 MB  (6 processes)
+           trace: 92 samples, peak 399.8 MB
+  run  4/47  dbeaver  startup   3364 ms  query memory   720.6 MB  (2 processes)
+           trace: 104 samples, peak 984.8 MB
+  run  4/47  pgadmin  startup   4311 ms  query memory   872.8 MB  (6 processes)
+           trace: 108 samples, peak 931.8 MB
+  run  5/47  pgadmin  startup   4145 ms  query memory   759.6 MB  (6 processes)
+           trace: 107 samples, peak 831.2 MB
+  run  5/47  dbeaver  startup   3613 ms  query memory   722.4 MB  (2 processes)
+           trace: 105 samples, peak 1056.4 MB
+  run  5/47  dbgate   startup    866 ms  query memory   672.0 MB  (9 processes)
+           trace: 94 samples, peak 808.9 MB
+  run  5/47  pgpad    startup    334 ms  query memory   261.1 MB  (6 processes)
+           trace: 92 samples, peak 398.0 MB
+  run  6/47  dbeaver  startup   3310 ms  query memory   731.4 MB  (2 processes)
+           trace: 104 samples, peak 1046.1 MB
+  run  6/47  pgadmin  startup   4332 ms  query memory   904.8 MB  (6 processes)
+           trace: 108 samples, peak 950.7 MB
+  run  6/47  pgpad    startup    363 ms  query memory   262.2 MB  (6 processes)
+           trace: 93 samples, peak 396.1 MB
+  run  6/47  dbgate   startup    880 ms  query memory   673.5 MB  (9 processes)
+           trace: 94 samples, peak 809.6 MB
+  run  7/47  dbeaver  startup   3656 ms  query memory   749.4 MB  (2 processes)
+           trace: 105 samples, peak 1044.4 MB
+  run  7/47  pgpad    startup    359 ms  query memory   259.8 MB  (6 processes)
+           trace: 93 samples, peak 387.5 MB
+  run  7/47  dbgate   startup    872 ms  query memory   668.6 MB  (9 processes)
+           trace: 95 samples, peak 807.3 MB
+  run  7/47  pgadmin  startup   4357 ms  query memory   909.8 MB  (6 processes)
+           trace: 108 samples, peak 962.2 MB
+  run  8/47  dbeaver  startup   3617 ms  query memory   729.6 MB  (2 processes)
+           trace: 105 samples, peak 1027.7 MB
+  run  8/47  pgpad    startup    337 ms  query memory   261.3 MB  (6 processes)
+           trace: 92 samples, peak 401.7 MB
+  run  8/47  dbgate   startup    873 ms  query memory   676.1 MB  (9 processes)
+           trace: 94 samples, peak 829.5 MB
+  run  8/47  pgadmin  startup   4144 ms  query memory   887.9 MB  (6 processes)
+           trace: 107 samples, peak 950.9 MB
+  run  9/47  pgpad    startup    346 ms  query memory   261.6 MB  (6 processes)
+           trace: 92 samples, peak 398.3 MB
+  run  9/47  dbgate   startup    868 ms  query memory   660.0 MB  (9 processes)
+           trace: 94 samples, peak 798.9 MB
+  run  9/47  pgadmin  startup   4139 ms  query memory   837.5 MB  (6 processes)
+           trace: 107 samples, peak 919.4 MB
+  run  9/47  dbeaver  startup   3649 ms  query memory   725.5 MB  (2 processes)
+           trace: 106 samples, peak 985.2 MB
+  run 10/47  pgpad    startup    343 ms  query memory   258.2 MB  (6 processes)
+           trace: 92 samples, peak 399.2 MB
+  run 10/47  pgadmin  startup   4195 ms  query memory   890.6 MB  (6 processes)
+           trace: 108 samples, peak 943.3 MB
+  run 10/47  dbgate   startup    867 ms  query memory   672.4 MB  (9 processes)
+           trace: 94 samples, peak 814.7 MB
+  run 10/47  dbeaver  startup   3591 ms  query memory   728.3 MB  (2 processes)
+           trace: 105 samples, peak 1014.6 MB
+  run 11/47  dbgate   startup    750 ms  query memory   650.9 MB  (9 processes)
+           trace: 94 samples, peak 804.7 MB
+  run 11/47  dbeaver  startup   3303 ms  query memory   710.2 MB  (2 processes)
+           trace: 104 samples, peak 1006.8 MB
+  run 11/47  pgadmin  startup   4353 ms  query memory   884.1 MB  (6 processes)
+           trace: 108 samples, peak 943.2 MB
+  run 11/47  pgpad    startup    351 ms  query memory   257.1 MB  (6 processes)
+           trace: 92 samples, peak 404.4 MB
+  run 12/47  dbeaver  startup   3572 ms  query memory   721.9 MB  (2 processes)
+           trace: 105 samples, peak 976.8 MB
+  run 12/47  pgadmin  startup   4188 ms  query memory   784.7 MB  (6 processes)
+           trace: 108 samples, peak 844.2 MB
+  run 12/47  pgpad    startup    357 ms  query memory   259.7 MB  (6 processes)
+           trace: 92 samples, peak 395.3 MB
+  run 12/47  dbgate   startup    867 ms  query memory   670.2 MB  (9 processes)
+           trace: 94 samples, peak 788.5 MB
+  run 13/47  dbgate   startup    654 ms  query memory   666.2 MB  (9 processes)
+           trace: 94 samples, peak 817.2 MB
+  run 13/47  dbeaver  startup   3590 ms  query memory   747.3 MB  (2 processes)
+           trace: 105 samples, peak 1073.2 MB
+  run 13/47  pgadmin  startup   4350 ms  query memory   890.7 MB  (6 processes)
+           trace: 108 samples, peak 958.2 MB
+  run 13/47  pgpad    startup    350 ms  query memory   258.5 MB  (6 processes)
+           trace: 92 samples, peak 412.5 MB
+  run 14/47  pgpad    startup    343 ms  query memory   260.0 MB  (6 processes)
+           trace: 93 samples, peak 390.1 MB
+  run 14/47  dbeaver  startup   3376 ms  query memory   722.8 MB  (2 processes)
+           trace: 104 samples, peak 1060.8 MB
+  run 14/47  pgadmin  startup   4136 ms  query memory   750.1 MB  (6 processes)
+           trace: 107 samples, peak 814.7 MB
+  run 14/47  dbgate   startup    880 ms  query memory   680.5 MB  (9 processes)
+           trace: 94 samples, peak 809.7 MB
+  run 15/47  dbgate   startup    654 ms  query memory   669.6 MB  (9 processes)
+           trace: 94 samples, peak 822.0 MB
+  run 15/47  pgadmin  startup   4324 ms  query memory   868.9 MB  (6 processes)
+           trace: 108 samples, peak 950.6 MB
+  run 15/47  pgpad    startup    363 ms  query memory   259.0 MB  (6 processes)
+           trace: 92 samples, peak 387.7 MB
+  run 15/47  dbeaver  startup   3624 ms  query memory   725.5 MB  (2 processes)
+           trace: 105 samples, peak 1015.5 MB
+  run 16/47  pgpad    startup    344 ms  query memory   262.5 MB  (6 processes)
+           trace: 92 samples, peak 408.8 MB
+  run 16/47  pgadmin  startup   4349 ms  query memory   870.9 MB  (6 processes)
+           trace: 108 samples, peak 937.1 MB
+  run 16/47  dbgate   startup    872 ms  query memory   646.8 MB  (9 processes)
+           trace: 94 samples, peak 771.6 MB
+  run 16/47  dbeaver  startup   3539 ms  query memory   732.1 MB  (2 processes)
+           trace: 105 samples, peak 1020.8 MB
+  run 17/47  dbgate   startup    715 ms  query memory   675.1 MB  (9 processes)
+           trace: 94 samples, peak 828.4 MB
+  run 17/47  pgpad    startup    348 ms  query memory   262.1 MB  (6 processes)
+           trace: 92 samples, peak 402.6 MB
+  run 17/47  pgadmin  startup   4349 ms  query memory   771.7 MB  (6 processes)
+           trace: 108 samples, peak 827.0 MB
+  run 17/47  dbeaver  startup   3604 ms  query memory   729.5 MB  (2 processes)
+           trace: 105 samples, peak 1062.3 MB
+  run 18/47  pgadmin  startup   4341 ms  query memory   905.9 MB  (6 processes)
+           trace: 108 samples, peak 936.4 MB
+  run 18/47  dbgate   startup    862 ms  query memory   677.8 MB  (9 processes)
+           trace: 95 samples, peak 822.7 MB
+  run 18/47  pgpad    startup    354 ms  query memory   258.6 MB  (6 processes)
+           trace: 92 samples, peak 402.3 MB
+  run 18/47  dbeaver  startup   3624 ms  query memory   736.1 MB  (2 processes)
+           trace: 105 samples, peak 1086.7 MB
+  run 19/47  pgadmin  startup   4346 ms  query memory   883.4 MB  (6 processes)
+           trace: 108 samples, peak 956.2 MB
+  run 19/47  dbeaver  startup   3633 ms  query memory   725.1 MB  (2 processes)
+           trace: 105 samples, peak 1031.1 MB
+  run 19/47  dbgate   startup    874 ms  query memory   675.3 MB  (9 processes)
+           trace: 94 samples, peak 838.1 MB
+  run 19/47  pgpad    startup    349 ms  query memory   259.3 MB  (6 processes)
+           trace: 92 samples, peak 396.6 MB
+  run 20/47  dbgate   startup    854 ms  query memory   671.7 MB  (9 processes)
+           trace: 94 samples, peak 815.1 MB
+  run 20/47  pgpad    startup    346 ms  query memory   256.1 MB  (6 processes)
+           trace: 92 samples, peak 401.4 MB
+  run 20/47  dbeaver  startup   3624 ms  query memory   730.8 MB  (2 processes)
+           trace: 105 samples, peak 1115.3 MB
+  run 20/47  pgadmin  startup   4339 ms  query memory   831.5 MB  (6 processes)
+           trace: 108 samples, peak 917.0 MB
+  run 21/47  dbgate   startup    862 ms  query memory   686.9 MB  (9 processes)
+           trace: 94 samples, peak 825.8 MB
+  run 21/47  pgadmin  startup   4137 ms  query memory   909.4 MB  (6 processes)
+           trace: 107 samples, peak 951.7 MB
+  run 21/47  pgpad    startup    357 ms  query memory   260.4 MB  (6 processes)
+           trace: 92 samples, peak 402.2 MB
+  run 21/47  dbeaver  startup   3628 ms  query memory   728.1 MB  (2 processes)
+           trace: 105 samples, peak 1014.5 MB
+  run 22/47  pgpad    startup    358 ms  query memory   257.4 MB  (6 processes)
+           trace: 92 samples, peak 396.5 MB
+  run 22/47  pgadmin  startup   4326 ms  query memory   794.4 MB  (6 processes)
+           trace: 108 samples, peak 827.0 MB
+  run 22/47  dbeaver  startup   3449 ms  query memory   724.3 MB  (2 processes)
+           trace: 105 samples, peak 1021.7 MB
+  run 22/47  dbgate   startup    871 ms  query memory   675.0 MB  (9 processes)
+           trace: 94 samples, peak 818.6 MB
+  run 23/47  pgpad    startup    343 ms  query memory   261.6 MB  (6 processes)
+           trace: 92 samples, peak 401.4 MB
+  run 23/47  dbeaver  startup   3269 ms  query memory   729.4 MB  (2 processes)
+           trace: 104 samples, peak 1055.2 MB
+  run 23/47  pgadmin  startup   4311 ms  query memory   870.0 MB  (6 processes)
+           trace: 108 samples, peak 935.3 MB
+  run 23/47  dbgate   startup    865 ms  query memory   682.1 MB  (9 processes)
+           trace: 95 samples, peak 802.6 MB
+  run 24/47  pgpad    startup    362 ms  query memory   256.0 MB  (6 processes)
+           trace: 93 samples, peak 398.9 MB
+  run 24/47  dbgate   startup    822 ms  query memory   661.8 MB  (9 processes)
+           trace: 94 samples, peak 834.9 MB
+  run 24/47  pgadmin  startup   4317 ms  query memory   890.2 MB  (6 processes)
+           trace: 108 samples, peak 940.8 MB
+  run 24/47  dbeaver  startup   3618 ms  query memory   735.0 MB  (2 processes)
+           trace: 105 samples, peak 1023.1 MB
+  run 25/47  pgpad    startup    351 ms  query memory   262.8 MB  (6 processes)
+           trace: 92 samples, peak 398.4 MB
+  run 25/47  pgadmin  startup   4279 ms  query memory   886.4 MB  (6 processes)
+           trace: 108 samples, peak 947.6 MB
+  run 25/47  dbgate   startup    872 ms  query memory   671.0 MB  (9 processes)
+           trace: 95 samples, peak 825.3 MB
+  run 25/47  dbeaver  startup   3616 ms  query memory   738.0 MB  (2 processes)
+           trace: 105 samples, peak 975.9 MB
+  run 26/47  dbeaver  startup   3251 ms  query memory   728.1 MB  (2 processes)
+           trace: 104 samples, peak 973.5 MB
+  run 26/47  pgpad    startup    355 ms  query memory   262.3 MB  (6 processes)
+           trace: 92 samples, peak 409.8 MB
+  run 26/47  pgadmin  startup   4341 ms  query memory   870.0 MB  (6 processes)
+           trace: 108 samples, peak 949.6 MB
+  run 26/47  dbgate   startup    870 ms  query memory   661.2 MB  (9 processes)
+           trace: 94 samples, peak 793.4 MB
+  run 27/47  pgpad    startup    349 ms  query memory   257.9 MB  (6 processes)
+           trace: 93 samples, peak 394.3 MB
+  run 27/47  dbeaver  startup   3622 ms  query memory   731.3 MB  (2 processes)
+           trace: 105 samples, peak 1029.4 MB
+  run 27/47  pgadmin  startup   4356 ms  query memory   771.8 MB  (6 processes)
+           trace: 108 samples, peak 833.0 MB
+  run 27/47  dbgate   startup    871 ms  query memory   681.1 MB  (9 processes)
+           trace: 95 samples, peak 788.1 MB
+  run 28/47  dbgate   startup    659 ms  query memory   657.7 MB  (9 processes)
+           trace: 94 samples, peak 804.3 MB
+  run 28/47  dbeaver  startup   3630 ms  query memory   726.9 MB  (2 processes)
+           trace: 105 samples, peak 1019.1 MB
+  run 28/47  pgpad    startup    353 ms  query memory   263.4 MB  (6 processes)
+           trace: 92 samples, peak 406.6 MB
+  run 28/47  pgadmin  startup   4375 ms  query memory   906.7 MB  (6 processes)
+           trace: 108 samples, peak 947.4 MB
+  run 29/47  pgadmin  startup   4153 ms  query memory   801.5 MB  (6 processes)
+           trace: 107 samples, peak 838.8 MB
+  run 29/47  pgpad    startup    354 ms  query memory   257.2 MB  (6 processes)
+           trace: 92 samples, peak 404.0 MB
+  run 29/47  dbgate   startup    864 ms  query memory   675.7 MB  (9 processes)
+           trace: 94 samples, peak 804.5 MB
+  run 29/47  dbeaver  startup   3618 ms  query memory   752.0 MB  (2 processes)
+           trace: 105 samples, peak 1030.8 MB
+  run 30/47  dbeaver  startup   3297 ms  query memory   733.9 MB  (2 processes)
+           trace: 104 samples, peak 1068.3 MB
+  run 30/47  pgadmin  startup   4365 ms  query memory   865.5 MB  (6 processes)
+           trace: 108 samples, peak 929.4 MB
+  run 30/47  dbgate   startup    859 ms  query memory   672.6 MB  (9 processes)
+           trace: 95 samples, peak 829.1 MB
+  run 30/47  pgpad    startup    348 ms  query memory   260.7 MB  (6 processes)
+           trace: 93 samples, peak 397.2 MB
+  run 31/47  pgadmin  startup   4158 ms  query memory   778.3 MB  (6 processes)
+           trace: 107 samples, peak 842.6 MB
+  run 31/47  dbeaver  startup   3622 ms  query memory   735.1 MB  (2 processes)
+           trace: 105 samples, peak 1072.4 MB
+  run 31/47  pgpad    startup    355 ms  query memory   259.4 MB  (6 processes)
+           trace: 93 samples, peak 409.1 MB
+  run 31/47  dbgate   startup    861 ms  query memory   669.7 MB  (9 processes)
+           trace: 94 samples, peak 812.6 MB
+  run 32/47  dbeaver  startup   3163 ms  query memory   721.2 MB  (2 processes)
+           trace: 104 samples, peak 1066.7 MB
+  run 32/47  dbgate   startup    825 ms  query memory   664.7 MB  (9 processes)
+           trace: 94 samples, peak 838.6 MB
+  run 32/47  pgpad    startup    360 ms  query memory   257.2 MB  (6 processes)
+           trace: 93 samples, peak 404.1 MB
+  run 32/47  pgadmin  startup   4367 ms  query memory   808.0 MB  (6 processes)
+           trace: 108 samples, peak 887.5 MB
+  run 33/47  dbgate   startup    714 ms  query memory   692.6 MB  (9 processes)
+           trace: 94 samples, peak 840.4 MB
+  run 33/47  pgadmin  startup   4288 ms  query memory   891.6 MB  (6 processes)
+           trace: 108 samples, peak 944.0 MB
+  run 33/47  pgpad    startup    363 ms  query memory   260.9 MB  (6 processes)
+           trace: 92 samples, peak 389.9 MB
+  run 33/47  dbeaver  startup   3593 ms  query memory   751.9 MB  (2 processes)
+           trace: 105 samples, peak 1074.9 MB
+  run 34/47  pgpad    startup    339 ms  query memory   259.5 MB  (6 processes)
+           trace: 92 samples, peak 405.2 MB
+  run 34/47  pgadmin  startup   4344 ms  query memory   791.6 MB  (6 processes)
+           trace: 108 samples, peak 874.7 MB
+  run 34/47  dbeaver  startup   3331 ms  query memory   719.8 MB  (2 processes)
+           trace: 104 samples, peak 1023.9 MB
+  run 34/47  dbgate   startup    861 ms  query memory   689.0 MB  (9 processes)
+           trace: 94 samples, peak 843.9 MB
+  run 35/47  dbeaver  startup   3270 ms  query memory   720.5 MB  (2 processes)
+           trace: 104 samples, peak 1017.5 MB
+  run 35/47  pgadmin  startup   4349 ms  query memory   886.4 MB  (6 processes)
+           trace: 108 samples, peak 944.2 MB
+  run 35/47  dbgate   startup    868 ms  query memory   666.1 MB  (9 processes)
+           trace: 94 samples, peak 806.9 MB
+  run 35/47  pgpad    startup    345 ms  query memory   260.0 MB  (6 processes)
+           trace: 92 samples, peak 396.4 MB
+  run 36/47  pgadmin  startup   4215 ms  query memory   870.7 MB  (6 processes)
+           trace: 108 samples, peak 935.6 MB
+  run 36/47  dbeaver  startup   3613 ms  query memory   721.6 MB  (2 processes)
+           trace: 105 samples, peak 1012.8 MB
+  run 36/47  pgpad    startup    355 ms  query memory   260.9 MB  (6 processes)
+           trace: 92 samples, peak 424.8 MB
+  run 36/47  dbgate   startup    863 ms  query memory   673.6 MB  (9 processes)
+           trace: 94 samples, peak 847.3 MB
+  run 37/47  dbgate   startup    674 ms  query memory   657.5 MB  (9 processes)
+           trace: 94 samples, peak 836.0 MB
+  run 37/47  dbeaver  startup   3630 ms  query memory   739.2 MB  (2 processes)
+           trace: 106 samples, peak 1019.0 MB
+  run 37/47  pgpad    startup    343 ms  query memory   260.5 MB  (6 processes)
+           trace: 92 samples, peak 414.0 MB
+  run 37/47  pgadmin  startup   4341 ms  query memory   885.4 MB  (6 processes)
+           trace: 108 samples, peak 950.3 MB
+  run 38/47  dbeaver  startup   3591 ms  query memory   723.6 MB  (2 processes)
+           trace: 105 samples, peak 1051.4 MB
+  run 38/47  pgpad    startup    341 ms  query memory   261.2 MB  (6 processes)
+           trace: 92 samples, peak 414.2 MB
+  run 38/47  dbgate   startup    880 ms  query memory   655.4 MB  (9 processes)
+           trace: 95 samples, peak 820.6 MB
+  run 38/47  pgadmin  startup   4336 ms  query memory   886.2 MB  (6 processes)
+           trace: 108 samples, peak 949.4 MB
+  run 39/47  pgadmin  startup   4133 ms  query memory   910.8 MB  (6 processes)
+           trace: 107 samples, peak 946.8 MB
+  run 39/47  dbeaver  startup   3605 ms  query memory   715.7 MB  (2 processes)
+           trace: 105 samples, peak 1014.5 MB
+  run 39/47  dbgate   startup    899 ms  query memory   681.9 MB  (9 processes)
+           trace: 95 samples, peak 803.7 MB
+  run 39/47  pgpad    startup    360 ms  query memory   260.5 MB  (6 processes)
+           trace: 92 samples, peak 391.8 MB
+  run 40/47  pgadmin  startup   4360 ms  query memory   833.6 MB  (6 processes)
+           trace: 108 samples, peak 920.5 MB
+  run 40/47  pgpad    startup    350 ms  query memory   261.1 MB  (6 processes)
+           trace: 92 samples, peak 401.2 MB
+  run 40/47  dbeaver  startup   3640 ms  query memory   731.1 MB  (2 processes)
+           trace: 105 samples, peak 1056.8 MB
+  run 40/47  dbgate   startup    864 ms  query memory   686.3 MB  (9 processes)
+           trace: 94 samples, peak 797.5 MB
+  run 41/47  pgpad    startup    344 ms  query memory   262.9 MB  (6 processes)
+           trace: 92 samples, peak 406.5 MB
+  run 41/47  dbgate   startup    664 ms  query memory   673.4 MB  (9 processes)
+           trace: 94 samples, peak 813.1 MB
+  run 41/47  pgadmin  startup   4325 ms  query memory   869.6 MB  (6 processes)
+           trace: 108 samples, peak 953.9 MB
+  run 41/47  dbeaver  startup   3626 ms  query memory   737.4 MB  (2 processes)
+           trace: 105 samples, peak 1021.9 MB
+  run 42/47  dbeaver  startup   3320 ms  query memory   724.3 MB  (2 processes)
+           trace: 104 samples, peak 994.6 MB
+  run 42/47  dbgate   startup    876 ms  query memory   684.5 MB  (9 processes)
+           trace: 95 samples, peak 801.8 MB
+  run 42/47  pgpad    startup    339 ms  query memory   262.0 MB  (6 processes)
+           trace: 92 samples, peak 408.0 MB
+  run 42/47  pgadmin  startup   4345 ms  query memory   862.2 MB  (6 processes)
+           trace: 108 samples, peak 943.4 MB
+  run 43/47  pgpad    startup    358 ms  query memory   262.2 MB  (6 processes)
+           trace: 93 samples, peak 428.6 MB
+  run 43/47  pgadmin  startup   4257 ms  query memory   881.5 MB  (6 processes)
+           trace: 108 samples, peak 929.1 MB
+  run 43/47  dbeaver  startup   3597 ms  query memory   735.7 MB  (2 processes)
+           trace: 105 samples, peak 1021.3 MB
+  run 43/47  dbgate   startup    866 ms  query memory   658.3 MB  (9 processes)
+           trace: 94 samples, peak 816.0 MB
+  run 44/47  dbeaver  startup   3284 ms  query memory   722.6 MB  (2 processes)
+           trace: 104 samples, peak 1028.3 MB
+  run 44/47  pgpad    startup    343 ms  query memory   260.9 MB  (6 processes)
+           trace: 92 samples, peak 401.4 MB
+  run 44/47  pgadmin  startup   4359 ms  query memory   760.6 MB  (6 processes)
+           trace: 108 samples, peak 822.8 MB
+  run 44/47  dbgate   startup    719 ms  query memory   673.1 MB  (9 processes)
+           trace: 94 samples, peak 814.8 MB
+  run 45/47  pgpad    startup    331 ms  query memory   262.7 MB  (6 processes)
+           trace: 92 samples, peak 402.7 MB
+  run 45/47  pgadmin  startup   4317 ms  query memory   899.9 MB  (6 processes)
+           trace: 108 samples, peak 934.9 MB
+  run 45/47  dbgate   startup    876 ms  query memory   665.1 MB  (9 processes)
+           trace: 94 samples, peak 822.8 MB
+  run 45/47  dbeaver  startup   3638 ms  query memory   735.7 MB  (2 processes)
+           trace: 105 samples, peak 979.1 MB
+  run 46/47  pgpad    startup    344 ms  query memory   260.5 MB  (6 processes)
+           trace: 92 samples, peak 394.9 MB
+  run 46/47  dbeaver  startup   3316 ms  query memory   713.8 MB  (2 processes)
+           trace: 104 samples, peak 1016.5 MB
+  run 46/47  pgadmin  startup   4349 ms  query memory   750.3 MB  (6 processes)
+           trace: 108 samples, peak 832.7 MB
+  run 46/47  dbgate   startup    872 ms  query memory   689.7 MB  (9 processes)
+           trace: 94 samples, peak 810.5 MB
+  run 47/47  pgadmin  startup   4389 ms  query memory   773.1 MB  (6 processes)
+           trace: 108 samples, peak 823.5 MB
+  run 47/47  pgpad    startup    360 ms  query memory   258.5 MB  (6 processes)
+           trace: 92 samples, peak 410.9 MB
+  run 47/47  dbgate   startup    876 ms  query memory   676.9 MB  (9 processes)
+           trace: 95 samples, peak 808.7 MB
+  run 47/47  dbeaver  startup   3593 ms  query memory   732.1 MB  (2 processes)
+           trace: 105 samples, peak 1010.4 MB
+
+summary (mean ± sd, n)
+  pgpad    startup     349 ±     9 ms   n=47
+    query: memory   260.6 ±   3.5 MB   n=47
+  dbeaver  startup    3522 ±   147 ms   n=47
+    query: memory   729.0 ±   9.3 MB   n=47
+  pgadmin  startup    4292 ±    84 ms   n=47
+    query: memory   852.9 ±  51.9 MB   n=47
+  dbgate   startup     834 ±    76 ms   n=47
+    query: memory   671.4 ±  10.9 MB   n=47

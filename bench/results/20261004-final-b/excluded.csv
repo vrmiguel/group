@@ -1,0 +1,2 @@
+run,app,reason
+3,dbeaver,"screenshot shows a URL (Universal Clipboard) pasted instead of the query; SQL syntax error, query not run"

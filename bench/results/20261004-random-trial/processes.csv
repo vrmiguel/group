@@ -1,0 +1,70 @@
+run,app,scenario,timestamp,pid,name,footprint_bytes
+1,pgadmin,query,2026-10-04T02:08:27,77194,pgAdmin 4 Helper (Renderer),471255032
+1,pgadmin,query,2026-10-04T02:08:27,77166,pgAdmin 4 Helper,168805312
+1,pgadmin,query,2026-10-04T02:08:27,77169,Python,161006360
+1,pgadmin,query,2026-10-04T02:08:27,77164,pgAdmin 4,63440696
+1,pgadmin,query,2026-10-04T02:08:27,77205,com.apple.SafariPlatformSupport,9601624
+1,pgadmin,query,2026-10-04T02:08:27,77167,pgAdmin 4 Helper,8749920
+1,dbgate,query,2026-10-04T02:08:57,77345,DbGate Helper (Renderer),182339120
+1,dbgate,query,2026-10-04T02:08:57,77339,DbGate Helper (GPU),139641912
+1,dbgate,query,2026-10-04T02:08:57,77332,DbGate,124536560
+1,dbgate,query,2026-10-04T02:08:57,77416,DbGate Helper,57885968
+1,dbgate,query,2026-10-04T02:08:57,77350,DbGate Helper,52118728
+1,dbgate,query,2026-10-04T02:08:57,77349,DbGate Helper,51840248
+1,dbgate,query,2026-10-04T02:08:57,77348,DbGate Helper,51725560
+1,dbgate,query,2026-10-04T02:08:57,77361,com.apple.SafariPlatformSupport,9716336
+1,dbgate,query,2026-10-04T02:08:57,77340,DbGate Helper,7603016
+1,pgpad,query,2026-10-04T02:09:32,77530,com.apple.WebKit.WebContent,180323144
+1,pgpad,query,2026-10-04T02:09:32,77526,pgpad-tauri,35292240
+1,pgpad,query,2026-10-04T02:09:32,77528,com.apple.WebKit.GPU,22545416
+1,pgpad,query,2026-10-04T02:09:32,77584,com.apple.SafariPlatformSupport,9667184
+1,pgpad,query,2026-10-04T02:09:32,77529,com.apple.WebKit.Networking,5866000
+1,pgpad,query,2026-10-04T02:09:32,77533,com.apple.audio.SandboxHelper,5407224
+1,dbeaver,query,2026-10-04T02:10:04,77660,dbeaver,718178392
+1,dbeaver,query,2026-10-04T02:10:04,77677,com.apple.SafariPlatformSupport,9585264
+2,pgadmin,query,2026-10-04T02:10:37,77839,pgAdmin 4 Helper (Renderer),406292400
+2,pgadmin,query,2026-10-04T02:10:37,77810,pgAdmin 4 Helper,173884424
+2,pgadmin,query,2026-10-04T02:10:37,77813,Python,158991104
+2,pgadmin,query,2026-10-04T02:10:37,77807,pgAdmin 4,64358200
+2,pgadmin,query,2026-10-04T02:10:37,77857,com.apple.SafariPlatformSupport,9601648
+2,pgadmin,query,2026-10-04T02:10:37,77811,pgAdmin 4 Helper,8684432
+2,dbeaver,query,2026-10-04T02:11:10,77988,dbeaver,716523680
+2,dbeaver,query,2026-10-04T02:11:10,78003,com.apple.SafariPlatformSupport,9994864
+2,pgpad,query,2026-10-04T02:11:39,78138,com.apple.WebKit.WebContent,182797080
+2,pgpad,query,2026-10-04T02:11:39,78134,pgpad-tauri,35472440
+2,pgpad,query,2026-10-04T02:11:39,78136,com.apple.WebKit.GPU,20743104
+2,pgpad,query,2026-10-04T02:11:39,78192,com.apple.SafariPlatformSupport,9585264
+2,pgpad,query,2026-10-04T02:11:39,78137,com.apple.WebKit.Networking,5997096
+2,pgpad,query,2026-10-04T02:11:39,78141,com.apple.audio.SandboxHelper,5423608
+2,dbgate,query,2026-10-04T02:12:08,78282,DbGate Helper (Renderer),191546928
+2,dbgate,query,2026-10-04T02:12:08,78273,DbGate Helper (GPU),132744248
+2,dbgate,query,2026-10-04T02:12:08,78271,DbGate,122210080
+2,dbgate,query,2026-10-04T02:12:08,78352,DbGate Helper,57607416
+2,dbgate,query,2026-10-04T02:12:08,78286,DbGate Helper,52135160
+2,dbgate,query,2026-10-04T02:12:08,78287,DbGate Helper,51905784
+2,dbgate,query,2026-10-04T02:12:08,78284,DbGate Helper,51348728
+2,dbgate,query,2026-10-04T02:12:08,78298,com.apple.SafariPlatformSupport,9699928
+2,dbgate,query,2026-10-04T02:12:08,78274,DbGate Helper,7652144
+3,pgadmin,query,2026-10-04T02:12:47,78491,pgAdmin 4 Helper (Renderer),469387184
+3,pgadmin,query,2026-10-04T02:12:47,78462,pgAdmin 4 Helper,193905720
+3,pgadmin,query,2026-10-04T02:12:47,78466,Python,161891096
+3,pgadmin,query,2026-10-04T02:12:47,78460,pgAdmin 4,64980792
+3,pgadmin,query,2026-10-04T02:12:47,78506,com.apple.SafariPlatformSupport,9634392
+3,pgadmin,query,2026-10-04T02:12:47,78464,pgAdmin 4 Helper,8569696
+3,pgpad,query,2026-10-04T02:13:17,78641,com.apple.WebKit.WebContent,186762008
+3,pgpad,query,2026-10-04T02:13:17,78637,pgpad-tauri,35619896
+3,pgpad,query,2026-10-04T02:13:17,78638,com.apple.WebKit.GPU,23053368
+3,pgpad,query,2026-10-04T02:13:17,78695,com.apple.SafariPlatformSupport,9732720
+3,pgpad,query,2026-10-04T02:13:17,78639,com.apple.WebKit.Networking,6521360
+3,pgpad,query,2026-10-04T02:13:17,78644,com.apple.audio.SandboxHelper,5440016
+3,dbeaver,query,2026-10-04T02:13:49,78765,dbeaver,730957936
+3,dbeaver,query,2026-10-04T02:13:49,78783,com.apple.SafariPlatformSupport,9601648
+3,dbgate,query,2026-10-04T02:14:18,78925,DbGate Helper (Renderer),191678000
+3,dbgate,query,2026-10-04T02:14:18,78918,DbGate Helper (GPU),125748208
+3,dbgate,query,2026-10-04T02:14:18,78916,DbGate,117442312
+3,dbgate,query,2026-10-04T02:14:18,78993,DbGate Helper,57836792
+3,dbgate,query,2026-10-04T02:14:18,78930,DbGate Helper,52036856
+3,dbgate,query,2026-10-04T02:14:18,78929,DbGate Helper,52020472
+3,dbgate,query,2026-10-04T02:14:18,78927,DbGate Helper,51512568
+3,dbgate,query,2026-10-04T02:14:18,78940,com.apple.SafariPlatformSupport,9781848
+3,dbgate,query,2026-10-04T02:14:18,78919,DbGate Helper,7521072

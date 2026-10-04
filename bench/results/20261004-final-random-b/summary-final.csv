@@ -1,0 +1,29 @@
+app;metric;mean;sd;n
+pgadmin;startup (s);4,29;0,09;50
+pgadmin;query (MB);854,03;51,23;50
+pgadmin;peak (MB);914,41;48,50;50
+pgadmin;task mean (MB);782,66;20,11;50
+pgadmin;end level (MB);861,93;48,94;50
+pgadmin;CPU time (s);12,14;0,14;50
+pgadmin;end CPU (%);10,37;1,74;50
+dbgate;startup (s);0,84;0,08;50
+dbgate;query (MB);671,56;10,62;50
+dbgate;peak (MB);813,68;16,54;50
+dbgate;task mean (MB);647,20;5,77;50
+dbgate;end level (MB);672,56;11,46;50
+dbgate;CPU time (s);8,30;0,12;50
+dbgate;end CPU (%);6,25;0,21;50
+pgpad;startup (s);0,35;0,01;50
+pgpad;query (MB);260,67;3,49;50
+pgpad;peak (MB);402,11;9,49;50
+pgpad;task mean (MB);261,14;3,76;50
+pgpad;end level (MB);260,85;3,50;50
+pgpad;CPU time (s);2,12;0,03;50
+pgpad;end CPU (%);0,38;0,05;50
+dbeaver;startup (s);3,53;0,14;50
+dbeaver;query (MB);729,13;9,14;50
+dbeaver;peak (MB);1031,15;32,61;50
+dbeaver;task mean (MB);758,62;8,78;50
+dbeaver;end level (MB);729,41;9,12;50
+dbeaver;CPU time (s);16,08;0,24;50
+dbeaver;end CPU (%);4,04;0,30;50

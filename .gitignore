@@ -5,3 +5,4 @@ __pycache__/
 .ropeproject/
 traces/
 bench/results/*/screenshots/
+bench/results/20261003-181447-placeholder/

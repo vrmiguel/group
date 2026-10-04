@@ -1,0 +1,13 @@
+run,position,app
+1,1,pgadmin
+1,2,dbgate
+1,3,pgpad
+1,4,dbeaver
+2,1,pgadmin
+2,2,dbeaver
+2,3,pgpad
+2,4,dbgate
+3,1,pgadmin
+3,2,pgpad
+3,3,dbeaver
+3,4,dbgate

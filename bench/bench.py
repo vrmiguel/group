@@ -26,6 +26,7 @@ import datetime as dt
 import hashlib
 import os
 import plistlib
+import random
 import shutil
 import signal
 import statistics
@@ -172,6 +173,11 @@ class Sampler(threading.Thread):
         self.join()
 
 
+class SkipRun(Exception):
+    """A launch that cannot be completed (e.g. a cancelled macro): it is
+    discarded and recorded in skipped.csv, and the session continues."""
+
+
 def check_macro(path):
     """Validates a macro without sending input; returns (ok, message)."""
     r = run([GHOSTHAND, "check", path])
@@ -185,6 +191,10 @@ def play_macro(path, timeout=300):
     except subprocess.TimeoutExpired:
         return -1, f"timed out after {timeout} s"
     return r.returncode, r.stderr.strip()
+
+
+def clipboard_is(text):
+    return subprocess.run(["pbpaste"], capture_output=True, text=True).stdout == text
 
 
 def set_clipboard(text):
@@ -227,6 +237,7 @@ def write_environment(path, args, apps, extra=()):
         f"settle: {args.settle} s, cooldown: {args.cooldown} s, "
         f"main window threshold: {args.min_width}x{args.min_height}, "
         f"checkpoint settle: {args.checkpoint_settle} s, "
+        f"task window: {f'{args.task_window} s' if args.task_window else 'off'}, "
         f"trace: {f'every {args.trace_interval} s' if args.trace else 'off'}",
     ]
     for name, (app_path, _, version) in apps.items():
@@ -239,6 +250,9 @@ def write_environment(path, args, apps, extra=()):
 def summarize(results):
     print("\nsummary (mean ± sd, n)")
     for name, observations in results.items():
+        if not observations:
+            print(f"  {name:8s} no valid runs")
+            continue
         sd = lambda xs: statistics.stdev(xs) if len(xs) > 1 else 0.0
         # Each checkpoint repeats the launch timing; count each launch only once.
         startups = list({r["run"]: r["startup_ms"] for r in observations}.values())
@@ -273,6 +287,11 @@ def main():
                         "with Ghosthand at each non-idle checkpoint")
     p.add_argument("--query",
                    help="file copied to the clipboard before every macro playback")
+    p.add_argument("--task-window", type=float,
+                   help="with --macros: measure each macro checkpoint this many "
+                        "seconds after the macro starts (countdown included), "
+                        "so every app is observed for the same duration; "
+                        "replaces --checkpoint-settle for macro checkpoints")
     p.add_argument("--checkpoint-settle", type=float, default=0,
                    help="seconds to wait after each checkpoint confirmation before measuring")
     p.add_argument("--trace", action="store_true",
@@ -281,6 +300,14 @@ def main():
                         "samples_processes.csv")
     p.add_argument("--trace-interval", type=float, default=0.25,
                    help="seconds between continuous samples (default 0.25)")
+    p.add_argument("--order", choices=["rotate", "random"], default="rotate",
+                   help="app order within each round: 'rotate' shifts it by one "
+                        "every round (counterbalancing); 'random' draws a new "
+                        "order per round from --seed (randomized complete blocks, "
+                        "each round being a block)")
+    p.add_argument("--seed", type=int,
+                   help="seed for --order random (default: drawn from the "
+                        "system and recorded, so the schedule is reproducible)")
     p.add_argument("--warmup", type=int, default=1,
                    help="unrecorded launches per app before measuring, so the "
                         "first recorded run is not a cold start")
@@ -295,6 +322,8 @@ def main():
         p.error("wait durations must be nonnegative")
     if args.trace_interval <= 0:
         p.error("--trace-interval must be positive")
+    if args.task_window is not None and (args.task_window <= 0 or not args.macros):
+        p.error("--task-window must be positive and requires --macros")
     if args.interactive and args.macros:
         p.error("--interactive and --macros are mutually exclusive")
     if args.query and not args.macros:
@@ -359,6 +388,22 @@ def main():
     os.makedirs(out, exist_ok=True)
     if macros:
         os.makedirs(os.path.join(out, "screenshots"), exist_ok=True)
+    # the whole schedule is fixed and saved before collection starts
+    if args.order == "random":
+        seed = args.seed if args.seed is not None else random.SystemRandom().randrange(2**32)
+        rng = random.Random(seed)
+        schedule = [rng.sample(names, len(names)) for _ in range(args.runs)]
+        extra_env.append(f"order: random, seed {seed}")
+    else:
+        schedule = [names[(i - 1) % len(names):] + names[:(i - 1) % len(names)]
+                    for i in range(1, args.runs + 1)]
+        extra_env.append("order: rotate")
+    with open(os.path.join(out, "schedule.csv"), "w", newline="") as f:
+        w = csv.writer(f)
+        w.writerow(["run", "position", "app"])
+        for i, order in enumerate(schedule, 1):
+            for pos, name in enumerate(order, 1):
+                w.writerow([i, pos, name])
     write_environment(os.path.join(out, "environment.txt"), args, apps, extra_env)
 
     runs_f = open(os.path.join(out, "runs.csv"), "w", newline="")
@@ -366,7 +411,7 @@ def main():
     runs_w = csv.writer(runs_f)
     procs_w = csv.writer(procs_f)
     runs_w.writerow(["run", "app", "scenario", "timestamp", "startup_ms",
-                     "total_bytes", "n_processes", "warnings"])
+                     "total_bytes", "n_processes", "warnings", "position"])
     procs_w.writerow(["run", "app", "scenario", "timestamp",
                       "pid", "name", "footprint_bytes"])
     if args.trace:
@@ -378,6 +423,11 @@ def main():
                             "n_processes", "cpu_seconds", "cpu_percent"])
         sproc_w.writerow(["run", "app", "t_seconds", "phase", "pid",
                           "start_mach_ticks", "name", "footprint_bytes", "cpu_seconds"])
+
+    skipped_f = open(os.path.join(out, "skipped.csv"), "w", newline="")
+    skipped_w = csv.writer(skipped_f)
+    skipped_w.writerow(["run", "app", "timestamp", "reason"])
+    n_skipped = 0
 
     print(f"writing to {out}")
     for _, (app_path, bundle_id, _) in apps.items():
@@ -397,9 +447,7 @@ def main():
 
     results = {n: [] for n in names}
     for i in range(1, args.runs + 1):
-        k = (i - 1) % len(names)
-        order = names[k:] + names[:k]
-        for name in order:
+        for position, name in enumerate(schedule[i - 1], 1):
             app_path, bundle_id, _ = apps[name]
             time.sleep(args.cooldown)
 
@@ -424,15 +472,19 @@ def main():
             _, startup_ms = r.stdout.split()
             startup_ms = float(startup_ms)
 
-            if name in prepare:
+            # rows are kept until the whole launch succeeds, so a skipped
+            # launch leaves no partial data behind
+            pending_runs, pending_procs, pending_results = [], [], []
+            try:
+              if name in prepare:
                 mark("prepare")
                 code, err = play_macro(prepare[name])
                 if code != 0:
-                    fail(f"error: ghosthand failed for {name}, run {i}, "
-                         f"'prepare' (exit {code}): {err}")
-            mark("settle")
-            time.sleep(args.settle)
-            for scenario in checkpoints:
+                    raise SkipRun(f"ghosthand exit {code} in 'prepare': {err}")
+              mark("settle")
+              time.sleep(args.settle)
+              overrun = None
+              for scenario in checkpoints:
                 if args.interactive:
                     mark(scenario)
                     input(f"  [{name}, run {i}] perform the '{scenario}' "
@@ -441,37 +493,71 @@ def main():
                     time.sleep(args.checkpoint_settle)
                 elif (name, scenario) in macros:
                     if query is not None and not set_clipboard(query):
-                        fail("error: clipboard did not keep the query "
-                             "(another app or Universal Clipboard changed it?)")
+                        raise SkipRun("clipboard did not keep the query "
+                                      "(another app or Universal Clipboard changed it?)")
                     mark(scenario)  # includes Ghosthand's 3 s countdown
+                    window_start = time.monotonic()
                     code, err = play_macro(macros[(name, scenario)])
                     if code != 0:
-                        fail(f"error: ghosthand failed for {name}, run {i}, "
-                             f"'{scenario}' (exit {code}): {err}")
+                        # 130 = cancelled, e.g. by external input
+                        raise SkipRun(f"ghosthand exit {code} in '{scenario}': "
+                                      f"{err.splitlines()[-1] if err else ''}")
+                    if query is not None and not clipboard_is(query):
+                        # something replaced the query while the macro ran
+                        # (e.g. Universal Clipboard), so it may have pasted
+                        # the wrong text
+                        raise SkipRun("clipboard changed during the macro")
                     mark(f"after-{scenario}")
-                    time.sleep(args.checkpoint_settle)
+                    if args.task_window:
+                        # same observation length for every app: wait out
+                        # whatever is left of the window after the macro
+                        remaining = args.task_window - (time.monotonic() - window_start)
+                        if remaining < 0:
+                            overrun = (f"macro overran the {args.task_window:g} s "
+                                       f"task window by {-remaining:.1f} s")
+                            print(f"    warning: {overrun}", file=sys.stderr)
+                        time.sleep(max(0.0, remaining))
+                    else:
+                        time.sleep(args.checkpoint_settle)
 
                 rows, warnings = group_csv(app_path)
+                if overrun:
+                    warnings.append(f"warning: {overrun}")
+                    overrun = None
                 if not rows:
-                    sys.exit(f"error: {name} is no longer running")
+                    raise SkipRun("the app is no longer running")
                 ts = dt.datetime.now().isoformat(timespec="seconds")
                 total = sum(int(row["footprint_bytes"]) for row in rows)
-                runs_w.writerow([i, name, scenario, ts, f"{startup_ms:.0f}",
-                                 total, len(rows), " | ".join(warnings)])
+                pending_runs.append([i, name, scenario, ts, f"{startup_ms:.0f}",
+                                     total, len(rows), " | ".join(warnings), position])
                 for row in rows:
-                    procs_w.writerow([i, name, scenario, ts,
-                                      row["pid"], row["name"], row["footprint_bytes"]])
-                runs_f.flush()
-                procs_f.flush()
+                    pending_procs.append([i, name, scenario, ts, row["pid"],
+                                          row["name"], row["footprint_bytes"]])
                 if macros:
                     # taken after measuring, so it cannot affect the reading
                     screenshot(os.path.join(out, "screenshots",
                                             f"run{i:02d}-{name}-{scenario}.png"))
-                results[name].append({"run": i, "scenario": scenario, "startup_ms": startup_ms, "total_bytes": total})
+                pending_results.append({"run": i, "scenario": scenario, "startup_ms": startup_ms, "total_bytes": total})
                 print(f"  run {i:2d}/{args.runs}  {name:8s} startup {startup_ms:6.0f} ms"
                       f"  {scenario} memory {total / 1e6:7.1f} MB  ({len(rows)} processes)"
                       f"{'  WARN' if warnings else ''}")
 
+            except SkipRun as e:
+                if sampler:
+                    sampler.stop()  # its samples are discarded
+                quit_app(app_path)
+                n_skipped += 1
+                skipped_w.writerow([i, name, dt.datetime.now().isoformat(timespec="seconds"),
+                                    str(e)])
+                skipped_f.flush()
+                print(f"  run {i:2d}/{args.runs}  {name:8s} SKIPPED: {e}", file=sys.stderr)
+                continue
+
+            runs_w.writerows(pending_runs)
+            procs_w.writerows(pending_procs)
+            runs_f.flush()
+            procs_f.flush()
+            results[name].extend(pending_results)
             if sampler:
                 sampler.stop()
                 for row in sampler.samples:
@@ -487,6 +573,9 @@ def main():
 
     runs_f.close()
     procs_f.close()
+    skipped_f.close()
+    if n_skipped:
+        print(f"\n{n_skipped} launch(es) skipped; see skipped.csv")
     if args.trace:
         samples_f.close()
         sproc_f.close()

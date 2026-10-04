@@ -62,12 +62,40 @@ def trace_metrics(samples, processes, end_window=2.0, cpu_window=3.0):
 
 def main():
     p = argparse.ArgumentParser()
-    p.add_argument("folder")
-    p.add_argument("--out", help="CSV path (default: <folder>/summary.csv)")
+    p.add_argument("folders", nargs="+", metavar="folder",
+                   help="one or more results folders; runs from several sessions "
+                        "of the same protocol are pooled, each run identified "
+                        "by (session, run)")
+    p.add_argument("--out", help="CSV path (default: <first folder>/summary.csv, "
+                                 "or summary-combined.csv for several folders)")
     args = p.parse_args()
 
-    with open(os.path.join(args.folder, "runs.csv")) as f:
-        rows = list(csv.DictReader(f))
+    def load(name, session):
+        """Rows of <folder>/<name> with "run" replaced by a (session, run) key."""
+        path = os.path.join(args.folders[session], name)
+        if not os.path.exists(path):
+            return None
+        with open(path) as f:
+            rows = list(csv.DictReader(f))
+        for r in rows:
+            r["run"] = (session, int(r["run"]))
+        return rows
+
+    # runs found invalid afterwards (e.g. from the screenshots) are listed in
+    # <folder>/excluded.csv (run,app,reason) and left out of every metric
+    excluded = set()
+    for i, folder in enumerate(args.folders):
+        path = os.path.join(folder, "excluded.csv")
+        if os.path.exists(path):
+            with open(path) as f:
+                for e in csv.DictReader(f):
+                    excluded.add(((i, int(e["run"])), e["app"]))
+                    print(f"excluded: {folder} run {e['run']} {e['app']}: {e['reason']}")
+
+    def keep(r):
+        return (r["run"], r["app"]) not in excluded
+
+    rows = [r for i in range(len(args.folders)) for r in load("runs.csv", i) if keep(r)]
 
     apps = list(dict.fromkeys(r["app"] for r in rows))
     checkpoints = list(dict.fromkeys(r["scenario"] for r in rows))
@@ -84,17 +112,16 @@ def main():
             table.append((app, f"{cp} (MB)", *stats(list(memory[app][cp].values()))))
         # paired differences between consecutive checkpoints of the same launch
         for a, b in zip(checkpoints, checkpoints[1:]):
-            runs = sorted(set(memory[app][a]) & set(memory[app][b]), key=int)
+            runs = sorted(set(memory[app][a]) & set(memory[app][b]))
             deltas = [memory[app][b][r] - memory[app][a][r] for r in runs]
             if deltas:
                 table.append((app, f"{b} - {a} (MB)", *stats(deltas)))
 
-    samples_path = os.path.join(args.folder, "samples.csv")
-    if os.path.exists(samples_path):
-        with open(samples_path) as f:
-            samples = list(csv.DictReader(f))
-        with open(os.path.join(args.folder, "samples_processes.csv")) as f:
-            processes = list(csv.DictReader(f))
+    traced = [load("samples.csv", i) for i in range(len(args.folders))]
+    if all(t is not None for t in traced):
+        samples = [s for t in traced for s in t if keep(s)]
+        processes = [r for i in range(len(args.folders))
+                     for r in load("samples_processes.csv", i) if keep(r)]
         by_run = defaultdict(lambda: ([], []))
         for s in samples:
             by_run[(s["app"], s["run"])][0].append(s)
@@ -118,7 +145,11 @@ def main():
     for app, metric, mean, sd, n in table:
         print(f"{app:8s} {metric:22s} {mean:9.2f} {sd:8.2f} {n:3d}")
 
-    out = args.out or os.path.join(args.folder, "summary.csv")
+    sessions = f"{len(args.folders)} sessions" if len(args.folders) > 1 else "1 session"
+    print(f"({sessions}; n counts runs pooled across sessions)")
+    out = args.out or os.path.join(
+        args.folders[0],
+        "summary-combined.csv" if len(args.folders) > 1 else "summary.csv")
     comma = lambda x: f"{x:.2f}".replace(".", ",")
     with open(out, "w", newline="") as f:
         w = csv.writer(f, delimiter=";")
