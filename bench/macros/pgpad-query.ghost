@@ -1,0 +1,33 @@
+activate com.pgpad.dev
+wait_window "pgpad"
+maximize
+wait 1390.016ms
+click 221.55078125 273.27734375 hold 94.691333ms
+wait 59.444917ms
+click 221.55078125 273.27734375 count 2 hold 75.010833ms
+wait 1079.139375ms
+click 651.08984375 245.84375 hold 87.526833ms
+wait 202.11475ms
+keydown command flags 0x100108
+wait 124.230792ms
+key a hold 83.683917ms flags 0x100108
+wait 380.050541ms
+key v hold 99.940125ms flags 0x100108
+wait 20.9325ms
+keyup command flags 0x100
+wait 667.295209ms
+keydown command flags 0x100108
+wait 88.933458ms
+key a hold 63.707417ms flags 0x100108
+wait 556.205958ms
+key return hold 73.409375ms flags 0x100108
+wait 123.170167ms
+keyup command flags 0x100
+wait 1820.463833ms
+click 1617.9453125 1091.69140625 hold 106.457042ms
+wait 401.844583ms
+click 1617.9453125 1091.69140625 hold 99.751208ms
+wait 391.906875ms
+click 1617.9453125 1091.69140625 count 2 hold 91.022ms
+wait 647.81425ms
+click 1625.09765625 1097.61328125 hold 85.515084ms

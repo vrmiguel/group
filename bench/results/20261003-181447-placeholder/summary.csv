@@ -1,0 +1,17 @@
+app;metric;mean;sd;n
+pgpad;startup (s);0,37;0,02;2
+pgpad;idle (MB);155,19;4,66;2
+pgpad;query (MB);248,84;4,01;2
+pgpad;query - idle (MB);93,65;0,65;2
+dbeaver;startup (s);3,88;0,00;2
+dbeaver;idle (MB);708,95;5,03;2
+dbeaver;query (MB);718,37;1,10;2
+dbeaver;query - idle (MB);9,41;3,93;2
+pgadmin;startup (s);5,95;0,02;2
+pgadmin;idle (MB);697,56;5,02;2
+pgadmin;query (MB);659,38;28,43;2
+pgadmin;query - idle (MB);-38,18;33,45;2
+dbgate;startup (s);0,87;0,00;2
+dbgate;idle (MB);480,77;0,60;2
+dbgate;query (MB);518,00;12,52;2
+dbgate;query - idle (MB);37,23;11,92;2

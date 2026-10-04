@@ -1,0 +1,6 @@
+# Played right after launch (startup already timed), before the idle settle:
+# pgpad does not restore its window size, the other apps restore maximized.
+activate com.pgpad.dev
+wait 1s
+wait_window "pgpad"
+maximize

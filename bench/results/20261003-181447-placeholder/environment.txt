@@ -1,0 +1,21 @@
+date: 2026-10-03T18:14:47
+command: bench/bench.py --runs 2 --scenario placeholder --checkpoints idle,query --macros bench/macros --query bench/query.sql --checkpoint-settle 10
+macOS: 26.6.2 (25G83)
+model: Mac14,10
+cpu: Apple M2 Pro
+memory: 16 GiB
+power: Now drawing from 'AC Power'
+low power mode: False
+group/bench commit: 32322f3 (uncommitted changes)
+warm-up launches per app: 1, settle: 30 s, cooldown: 10 s, main window threshold: 800x500, checkpoint settle: 10.0 s
+app pgpad: /Applications/pgpad.app version 0.0.1
+app dbeaver: /Applications/DBeaver.app version 26.1.0
+app pgadmin: /Applications/pgAdmin 4.app version 9.15
+app dbgate: /Applications/DbGate.app version 7.3.1
+ghosthand: ghosthand 0.1.0
+macro pgpad/query: bench/macros/pgpad-query.ghost sha256 f129a37c477be2ce
+macro dbeaver/query: bench/macros/dbeaver-query.ghost sha256 128fbf8a8bbad0d6
+macro pgadmin/query: bench/macros/pgadmin-query.ghost sha256 ad89a370542642df
+macro dbgate/query: bench/macros/dbgate-query.ghost sha256 033531fe595c2240
+macro pgpad/prepare: bench/macros/pgpad-prepare.ghost sha256 48e4587021b0b54d
+query: bench/query.sql sha256 bfbd7e1c951d3caa

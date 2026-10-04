@@ -1,0 +1,7 @@
+# build outputs
+/group
+/bench/launchwait
+__pycache__/
+.ropeproject/
+traces/
+bench/results/*/screenshots/
